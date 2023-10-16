@@ -27,6 +27,7 @@ namespace DisorderedOrdersMVC.Controllers
 
         public interface IPaymentProcessor
         {
+
             void ProcessPayment(int amount, string paymentType);
         }
 
