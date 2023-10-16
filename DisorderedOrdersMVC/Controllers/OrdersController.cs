@@ -123,7 +123,7 @@ namespace DisorderedOrdersMVC.Controllers
 
 
 
-            _paymentProcessor.ProcessPayment(processor);
+            processor.ProcessPayment(processor);
 
             _context.Orders.Add(order);
             _context.SaveChanges();
