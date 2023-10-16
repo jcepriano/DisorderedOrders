@@ -48,7 +48,7 @@ namespace DisorderedOrdersMVC.Controllers
             {
                 if (paymentType == "paypal")
                 {
-                    new BitcoinProcessor();
+                    new PayPalProcessor();
                 }
             }
         }
