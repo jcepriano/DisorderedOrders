@@ -9,12 +9,12 @@ namespace DisorderedOrdersMVC.Controllers
     public class OrdersController : Controller
     {
         private readonly DisorderedOrdersContext _context;
-        private readonly IPaymentProcessor _paymentProcessor;
+        //private readonly IPaymentProcessor _paymentProcessor;
 
-        public OrdersController(DisorderedOrdersContext context, IPaymentProcessor paymentProcessor)
+        public OrdersController(DisorderedOrdersContext context)
         {
             _context = context;
-            _paymentProcessor = paymentProcessor;
+            //_paymentProcessor = paymentProcessor;
         }
 
         public IActionResult New(int customerId)
