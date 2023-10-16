@@ -9,57 +9,11 @@ namespace DisorderedOrdersMVC.Controllers
     public class OrdersController : Controller
     {
         private readonly DisorderedOrdersContext _context;
-        //private readonly IPaymentProcessor _paymentProcessor;
 
         public OrdersController(DisorderedOrdersContext context)
         {
             _context = context;
-            //_paymentProcessor = paymentProcessor;
         }
-
-        public IActionResult New(int customerId)
-        {
-            var products = _context.Products.Where(p => p.StockQuantity > 0);
-            ViewData["CustomerId"] = customerId;
-
-            return View(products);
-        }
-
-        //public interface IPaymentProcessor
-        //{
-
-        //    void ProcessPayment(int amount, string paymentType);
-        //}
-
-        //public class BitcoinProcessor : IPaymentProcessor
-        //{
-        //    public void ProcessPayment(int amount, string paymentType)
-        //    {
-        //        if (paymentType == "bitcoin")
-        //        {
-        //            new BitcoinProcessor();
-        //        }
-        //    }
-        //}
-
-        //public class PayPalProcessor : IPaymentProcessor
-        //{
-        //    public void ProcessPayment(int amount, string paymentType)
-        //    {
-        //        if (paymentType == "paypal")
-        //        {
-        //            new PayPalProcessor();
-        //        }
-        //    }
-        //}
-
-        //public class CreditCardProcessor : IPaymentProcessor
-        //{
-        //    public void ProcessPayment(int amount, string paymentType)
-        //    {
-        //        new CreditCardProcessor();
-        //    }
-        //}
 
         private Order CreateOrder(IFormCollection collection, Customer customer)
         {
@@ -77,6 +31,15 @@ namespace DisorderedOrdersMVC.Controllers
             }
             return order;
         }
+
+        public IActionResult New(int customerId)
+        {
+            var products = _context.Products.Where(p => p.StockQuantity > 0);
+            ViewData["CustomerId"] = customerId;
+
+            return View(products);
+        }
+
 
         [HttpPost]
         [Route("/orders")]
