@@ -9,10 +9,12 @@ namespace DisorderedOrdersMVC.Controllers
     public class OrdersController : Controller
     {
         private readonly DisorderedOrdersContext _context;
+        //private readonly IPaymentProcessor _paymentProcessor;
 
         public OrdersController(DisorderedOrdersContext context)
         {
             _context = context;
+            //_paymentProcessor = paymentProcessor;
         }
 
         public IActionResult New(int customerId)
@@ -23,14 +25,46 @@ namespace DisorderedOrdersMVC.Controllers
             return View(products);
         }
 
-        [HttpPost]
-        [Route("/orders")]
-        public IActionResult Create(IFormCollection collection, string paymentType)
+        //public interface IPaymentProcessor
+        //{
+
+        //    void ProcessPayment(int amount, string paymentType);
+        //}
+
+        //public class BitcoinProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        if (paymentType == "bitcoin")
+        //        {
+        //            new BitcoinProcessor();
+        //        }
+        //    }
+        //}
+
+        //public class PayPalProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        if (paymentType == "paypal")
+        //        {
+        //            new PayPalProcessor();
+        //        }
+        //    }
+        //}
+
+        //public class CreditCardProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        new CreditCardProcessor();
+        //    }
+        //}
+
+        private Order CreateOrder(IFormCollection collection, Customer customer)
         {
-            // create order
-            int customerId = Convert.ToInt16(collection["CustomerId"]);
-            Customer customer = _context.Customers.Find(customerId);
             var order = new Order() { Customer = customer };
+
             for (var i = 1; i < collection.Count - 1; i++)
             {
                 var kvp = collection.ToList()[i];
@@ -41,6 +75,17 @@ namespace DisorderedOrdersMVC.Controllers
                     order.Items.Add(orderItem);
                 }
             }
+            return order;
+        }
+
+        [HttpPost]
+        [Route("/orders")]
+        public IActionResult Create(IFormCollection collection, string paymentType)
+        {
+            // create order
+            int customerId = Convert.ToInt16(collection["CustomerId"]);
+            Customer customer = _context.Customers.Find(customerId);
+            var order = CreateOrder(collection, customer);
 
             // verify stock available
             foreach (var orderItem in order.Items)
@@ -76,12 +121,14 @@ namespace DisorderedOrdersMVC.Controllers
                 processor = new CreditCardProcessor();
             }
 
+
+
             processor.ProcessPayment(total);
 
             _context.Orders.Add(order);
             _context.SaveChanges();
 
-            return RedirectToAction("Show", new { id = order.Id});
+            return RedirectToAction("Show", new { id = order.Id });
         }
 
         [Route("/orders/{id:int}")]
