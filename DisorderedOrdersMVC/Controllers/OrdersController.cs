@@ -25,41 +25,41 @@ namespace DisorderedOrdersMVC.Controllers
             return View(products);
         }
 
-        public interface IPaymentProcessor
-        {
+        //public interface IPaymentProcessor
+        //{
 
-            void ProcessPayment(int amount, string paymentType);
-        }
+        //    void ProcessPayment(int amount, string paymentType);
+        //}
 
-        public class BitcoinProcessor : IPaymentProcessor
-        {
-            public void ProcessPayment(int amount, string paymentType)
-            {
-                if (paymentType == "bitcoin")
-                {
-                    new BitcoinProcessor();
-                }
-            }
-        }
+        //public class BitcoinProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        if (paymentType == "bitcoin")
+        //        {
+        //            new BitcoinProcessor();
+        //        }
+        //    }
+        //}
 
-        public class PayPalProcessor : IPaymentProcessor
-        {
-            public void ProcessPayment(int amount, string paymentType)
-            {
-                if (paymentType == "paypal")
-                {
-                    new PayPalProcessor();
-                }
-            }
-        }
+        //public class PayPalProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        if (paymentType == "paypal")
+        //        {
+        //            new PayPalProcessor();
+        //        }
+        //    }
+        //}
 
-        public class CreditCardProcessor : IPaymentProcessor
-        {
-            public void ProcessPayment(int amount, string paymentType)
-            {
-                new CreditCardProcessor();
-            }
-        }
+        //public class CreditCardProcessor : IPaymentProcessor
+        //{
+        //    public void ProcessPayment(int amount, string paymentType)
+        //    {
+        //        new CreditCardProcessor();
+        //    }
+        //}
 
         private Order CreateOrder(IFormCollection collection, Customer customer)
         {
@@ -107,23 +107,23 @@ namespace DisorderedOrdersMVC.Controllers
             }
 
             // process payment
-            //IPaymentProcessor processor;
-            //if (paymentType == "bitcoin")
-            //{
-            //    processor = new BitcoinProcessor();
-            //}
-            //else if (paymentType == "paypal")
-            //{
-            //    processor = new PayPalProcessor();
-            //}
-            //else
-            //{
-            //    processor = new CreditCardProcessor();
-            //}
+            IPaymentProcessor processor;
+            if (paymentType == "bitcoin")
+            {
+                processor = new BitcoinProcessor();
+            }
+            else if (paymentType == "paypal")
+            {
+                processor = new PayPalProcessor();
+            }
+            else
+            {
+                processor = new CreditCardProcessor();
+            }
 
 
 
-            _paymentProcessor.ProcessPayment(total, paymentType);
+            _paymentProcessor.ProcessPayment(processor);
 
             _context.Orders.Add(order);
             _context.SaveChanges();
